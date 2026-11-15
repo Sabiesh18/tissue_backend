@@ -47,10 +47,20 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`=======================================================`);
   console.log(`Tissue Manufacturing Backend running on port ${PORT}`);
   console.log(`Connected to PostgreSQL server [local-dev], Database [tissues]`);
   console.log(`API base endpoint: http://localhost:${PORT}/api`);
   console.log(`=======================================================`);
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use by another running instance of node.`);
+    console.error(`Please stop the existing process or use: Get-Process -Name node | Stop-Process -Force`);
+    process.exit(1);
+  } else {
+    console.error('Server error:', err);
+  }
 });
