@@ -33,16 +33,19 @@ router.delete('/vendors/:id', verifyToken, requireRole('ADMIN'), vendorControlle
 // 5. Customers
 router.get('/customers', verifyToken, customerController.getAllCustomers);
 router.post('/customers', verifyToken, customerController.saveCustomer);
+router.delete('/customers/:id', verifyToken, requireRole('ADMIN'), customerController.deleteCustomer);
 
 // 6. Production & Manufacturing
 router.get('/production/plans', verifyToken, productionController.getAllPlans);
 router.post('/production/plans', verifyToken, productionController.savePlan);
 router.get('/production/batches', verifyToken, productionController.getAllBatches);
 router.post('/production/batches', verifyToken, productionController.saveBatch);
+router.delete('/production/batches/:id', verifyToken, requireRole('ADMIN', 'PROD_MGR'), productionController.deleteBatch);
 
 // 7. Inventory & Products
 router.get('/products', verifyToken, inventoryController.getAllProducts);
 router.post('/products', verifyToken, inventoryController.saveProduct);
+router.delete('/products/:id', verifyToken, requireRole('ADMIN', 'PROD_MGR'), inventoryController.deleteProduct);
 router.get('/inventory', verifyToken, inventoryController.getInventory);
 router.post('/inventory/adjust', verifyToken, inventoryController.adjustStock);
 router.get('/inventory/movements', verifyToken, inventoryController.getMovements);

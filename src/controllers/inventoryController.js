@@ -149,9 +149,26 @@ const getMovements = async (req, res) => {
   }
 };
 
+const deleteProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const actorId = req.user ? req.user.userId : null;
+    const actorName = req.user ? req.user.username : 'SYSTEM';
+
+    const result = await executeFunction('fn_product_delete', [id, actorId, actorName]);
+    return res.status(200).json({
+      success: result.isSuccessful,
+      message: result.resMsg,
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   getAllProducts,
   saveProduct,
+  deleteProduct,
   getInventory,
   adjustStock,
   getMovements,

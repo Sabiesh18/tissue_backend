@@ -2089,7 +2089,9 @@ BEGIN
             'updatedAt', to_char(s.updated_at, 'YYYY-MM-DD"T"HH24:MI:SS')
         )
     ) INTO v_result
-    FROM tbl_system_settings s ORDER BY s.category, s.setting_key;
+    FROM (
+        SELECT * FROM tbl_system_settings ORDER BY category, setting_key
+    ) s;
 
     RETURN QUERY SELECT TRUE, 'SUCCESS'::VARCHAR, 'Settings retrieved'::VARCHAR, NULL::VARCHAR, jsonb_array_length(COALESCE(v_result, '[]'::jsonb)), 1, COALESCE(v_result, '[]'::jsonb);
 END;
